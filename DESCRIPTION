@@ -1,0 +1,22 @@
+Package: BayesianFit
+Type: Package
+Title: Simulation Study for Bayesian Model Fit Index
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Ae Kyong Jung", 
+      email = "aekyong-jung@uiowa.edu",
+      role = c("aut", "cre")
+    )
+  )
+Description: More about what it does (maybe more than one line).
+    Continuation lines should be indented.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    blatent,
+    loo,
+    stringr,
+    psych
+
