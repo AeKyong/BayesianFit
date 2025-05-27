@@ -33,7 +33,7 @@ estimateModel = function(data.mat, syntax.model, inits,  priors){
   # names(parameterEstimates) = names(jointMAP) = names(marginalMAP)
 
 
-  # relative fit  !DIC, WAIC value/ number of model parameters check!
+  # relative fit
   dic = fitModel[["informationCriteria"]][["DIC"]][["DIC"]]
   waic = -2 * fitModel[["informationCriteria"]][["WAIC"]][["WAIC"]]
   loo = loo(fitModel[["logLikelihoods"]][["marginal"]], save_psis = TRUE)$"estimate"["looic","Estimate"]
