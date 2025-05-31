@@ -5,9 +5,12 @@ library(blatent)
 library(loo)
 library(stringr)
 library(psych)
+library(foreach)
+library(doParallel)
+
 
 # grab command line arguments
-arrayNumber = 3 # leave for debugging on local machine
+arrayNumber = 1 # leave for debugging on local machine
 #arrayNumber = as.numeric(commandArgs(trailingOnly = TRUE)[1])
 
 set.seed(arrayNumber)
@@ -18,10 +21,8 @@ simulationsSpecs = conditionInformation(arrayNumber = arrayNumber, nReplications
 
 # generate simulation data
 simDataList = simualteDCM(trueModel = simulationsSpecs$trueModel,
-                          nAttributes = simulationsSpecs$nAttributes,
                           nObs = simulationsSpecs$nObs,
-                          quality = simulationsSpecs$quality,
-                          nItems = simulationsSpecs$nItems
+                          quality = simulationsSpecs$quality
                           )
 
 
@@ -34,41 +35,20 @@ inits = setDefaultInitializeParameters(
 )
 
 
-if(simulationsSpecs$nAttributes == 3){
-  syntax.lcdm = syntax.lcdm3
-  syntax.dina = syntax.dina3
-  syntax.crum = syntax.crum3
-} else if(simulationsSpecs$nAttributes == 5){
-  syntax.lcdm = syntax.lcdm5
-  syntax.dina = syntax.dina5
-  syntax.crum = syntax.crum5
-}
+syntax.model = c(syntax.lcdm.correct, syntax.lcdm.under,syntax.lcdm.over,
+                 syntax.dina.correct, syntax.dina.under,syntax.dina.over,
+                 syntax.crum.correct, syntax.crum.under,syntax.crum.over)
 
-
-# estimation
-fit.lcdm = estimateModel(
-  data.mat = simDataList$responseData,
-  syntax.model = syntax.lcdm,
-  inits = inits,
-  priors = simulationsSpecs$prior
+fit.model = list()
+model=1
+for (model in 1:length(syntax.model)){
+  fit.model[[model]] = estimateModel(
+    data.mat = simDataList$responseData,
+    syntax.model = syntax.model[model],
+    inits = inits,
+    priors = simulationsSpecs$prior
   )
 
-fit.dina = estimateModel(
-  data.mat = simDataList$responseData,
-  syntax.model = syntax.dina,
-  inits = inits,
-  priors = simulationsSpecs$prior
-)
+}
 
-fit.crum = estimateModel(
-  data.mat = simDataList$responseData,
-  syntax.model = syntax.crum,
-  inits = inits,
-  priors = simulationsSpecs$prior
-)
-
-
-
-
-
-
+save(fit.model, paste0("fit_", arrayNumber, ".RData"))

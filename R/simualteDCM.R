@@ -1,12 +1,16 @@
 # generate data and get a response data, itemParameter, jointMAP, and marginalMAP
 
-simualteDCM = function(trueModel, nAttributes, nObs, quality, nItems){
+simualteDCM = function(trueModel, nObs, quality){
+
+   # nItems
+  trueModel.lines = strsplit(trueModel, "\n")[[1]]
+  number = regmatches(trueModel.lines, regexpr("item1-item(\\d+)", trueModel.lines))
+  nItems = sub("item1-item", "", number)
 
   # item names
   itemNames = paste0("item", 1:nItems)
 
   # true joint probability
-  if(nAttributes == 3){
     trueParameters = createParameterVector(modelText = trueModel)
     trueParameters[grep(pattern = "joint.prob000", x = names(trueParameters))] = .293
     trueParameters[grep(pattern = "joint.prob001", x = names(trueParameters))] = .075
@@ -16,42 +20,6 @@ simualteDCM = function(trueModel, nAttributes, nObs, quality, nItems){
     trueParameters[grep(pattern = "joint.prob101", x = names(trueParameters))] = .054
     trueParameters[grep(pattern = "joint.prob110", x = names(trueParameters))] = .054
     trueParameters[grep(pattern = "joint.prob111", x = names(trueParameters))] = .321
-  } else if(nAttributes == 5){
-    trueParameters = createParameterVector(modelText = trueModel)
-    trueParameters[grep(pattern = "joint.prob00000", x = names(trueParameters))] = 0.2427
-    trueParameters[grep(pattern = "joint.prob00001", x = names(trueParameters))] = 0.0285
-    trueParameters[grep(pattern = "joint.prob00010", x = names(trueParameters))] = 0.0285
-    trueParameters[grep(pattern = "joint.prob00011", x = names(trueParameters))] = 0.0109
-    trueParameters[grep(pattern = "joint.prob00100", x = names(trueParameters))] = 0.0285
-    trueParameters[grep(pattern = "joint.prob00101", x = names(trueParameters))] = 0.0109
-    trueParameters[grep(pattern = "joint.prob00110", x = names(trueParameters))] = 0.0109
-    trueParameters[grep(pattern = "joint.prob00111", x = names(trueParameters))] = 0.0114
-    trueParameters[grep(pattern = "joint.prob01000", x = names(trueParameters))] = 0.0285
-    trueParameters[grep(pattern = "joint.prob01001", x = names(trueParameters))] = 0.0109
-    trueParameters[grep(pattern = "joint.prob01010", x = names(trueParameters))] = 0.0109
-    trueParameters[grep(pattern = "joint.prob01011", x = names(trueParameters))] = 0.0114
-    trueParameters[grep(pattern = "joint.prob01100", x = names(trueParameters))] = 0.0109
-    trueParameters[grep(pattern = "joint.prob01101", x = names(trueParameters))] = 0.0114
-    trueParameters[grep(pattern = "joint.prob01110", x = names(trueParameters))] = 0.0114
-    trueParameters[grep(pattern = "joint.prob01111", x = names(trueParameters))] = 0.0286
-    trueParameters[grep(pattern = "joint.prob10000", x = names(trueParameters))] = 0.0285
-    trueParameters[grep(pattern = "joint.prob10001", x = names(trueParameters))] = 0.0109
-    trueParameters[grep(pattern = "joint.prob10010", x = names(trueParameters))] = 0.0109
-    trueParameters[grep(pattern = "joint.prob10011", x = names(trueParameters))] = 0.0114
-    trueParameters[grep(pattern = "joint.prob10100", x = names(trueParameters))] = 0.0109
-    trueParameters[grep(pattern = "joint.prob10101", x = names(trueParameters))] = 0.0114
-    trueParameters[grep(pattern = "joint.prob10110", x = names(trueParameters))] = 0.0114
-    trueParameters[grep(pattern = "joint.prob10111", x = names(trueParameters))] = 0.0286
-    trueParameters[grep(pattern = "joint.prob11000", x = names(trueParameters))] = 0.0109
-    trueParameters[grep(pattern = "joint.prob11001", x = names(trueParameters))] = 0.0114
-    trueParameters[grep(pattern = "joint.prob11010", x = names(trueParameters))] = 0.0114
-    trueParameters[grep(pattern = "joint.prob11011", x = names(trueParameters))] = 0.0286
-    trueParameters[grep(pattern = "joint.prob11100", x = names(trueParameters))] = 0.0114
-    trueParameters[grep(pattern = "joint.prob11101", x = names(trueParameters))] = 0.0286
-    trueParameters[grep(pattern = "joint.prob11110", x = names(trueParameters))] = 0.0286
-    trueParameters[grep(pattern = "joint.prob11111", x = names(trueParameters))] = 0.2415
-  }
-
 
 
   # true item quality
@@ -88,7 +56,6 @@ simualteDCM = function(trueModel, nAttributes, nObs, quality, nItems){
               trueJointMAP = trueJointMAP,
               trueMarginalMAP = trueMarginalMAP,
               responseData = responseData
-
              )
          )
 }

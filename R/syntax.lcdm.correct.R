@@ -1,4 +1,4 @@
-syntax.lcdm3 = "
+syntax.lcdm.correct = "
     item1	~ A1
     item2	~ A1
     item3	~ A1
