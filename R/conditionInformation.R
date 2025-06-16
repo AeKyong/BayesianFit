@@ -1,14 +1,18 @@
 conditionInformation = function(arrayNumber, nReplicationsPerCondition, nCores = 4){
-# browser()
+
   # convert array number to condition number
   conditionNumber = floor((arrayNumber - 1)/nReplicationsPerCondition) + 1
 
   # create conditions list
   conditions = list(
-    trueModel = c("lcdm", "dina", "crum"),
-    quality = c("low", "medium", "high"),
     prior = c("uninformative", "informative"),
-    nObs = c(100, 500, 1000, 2000)
+    nObs = c(100, 500, 1000, 2000),
+    quality = c("low", "medium", "high"),
+    trueModel = c("lcdm", "dina", "crum"),
+    estiModel = c("lcdmC", "lcdmU", "lcdmO",
+                  "dinaC", "dinaU", "dinaO",
+                  "crumC", "crumU", "crumO"
+                  )
   )
 
   # number of conditions
@@ -33,6 +37,8 @@ conditionInformation = function(arrayNumber, nReplicationsPerCondition, nCores =
   quality = conditions$quality[conditionsMatrix[conditionNumber,2]]
   prior =  conditions$prior[conditionsMatrix[conditionNumber,3]]
   nObs = conditions$nObs[conditionsMatrix[conditionNumber,4]]
+  estiModel = conditions$estiModel[conditionsMatrix[conditionNumber,5]]
+
 
 
   # true generation model syntax
@@ -46,28 +52,50 @@ conditionInformation = function(arrayNumber, nReplicationsPerCondition, nCores =
 
 
  # prior
-  if(prior == "informative"){
-     prior = setDefaultPriors(
-      normalMean = 0,
-      normalVariance = 5,
-      normalCovariance = 0,
-      dirichletAlpha = 1
-    )
-  } else if(prior == "uninformative"){
+   if(prior == "uninformative"){
     prior = setDefaultPriors(
       normalMean = 0,
-      normalVariance = 1000,
+      normalVariance = 10,
       normalCovariance = 0,
       dirichletAlpha = 1
     )
-  }
+   } else if(prior == "informative"){
+     prior = setDefaultPriors(
+       normalMean = 0,
+       normalVariance = 1,
+       normalCovariance = 0,
+       dirichletAlpha = 1
+     )
+   }
 
+
+  # estimation model
+  if(estiModel == "lcdmC"){
+    estiModel = eval(quote(syntax.lcdm.correct))
+  } else if(estiModel == "lcdmU"){
+    estiModel = eval(quote(syntax.lcdm.under))
+  } else if(estiModel == "lcdmO"){
+    estiModel = eval(quote(syntax.lcdm.over))
+  } else if(estiModel == "dinaC"){
+    estiModel = eval(quote(syntax.dina.correct))
+  } else if(estiModel == "dinaU"){
+    estiModel = eval(quote(syntax.dina.under))
+  } else if(estiModel == "dinaO"){
+    estiModel = eval(quote(syntax.dina.over))
+  } else if(estiModel == "crumC"){
+    estiModel = eval(quote(syntax.crum.correct))
+  } else if(estiModel == "crumU"){
+    estiModel = eval(quote(syntax.crum.under))
+  } else if(estiModel == "crumO"){
+    estiModel = eval(quote(syntax.crum.over))
+  }
 
 
   return(list(trueModel = trueModel,
               quality = quality,
               prior = prior,
-              nObs = nObs
+              nObs = nObs,
+              estiModel  = estiModel
               )
          )
 

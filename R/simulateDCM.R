@@ -1,6 +1,6 @@
 # generate data and get a response data, itemParameter, jointMAP, and marginalMAP
 
-simualteDCM = function(trueModel, nObs, quality){
+simulateDCM = function(trueModel, nObs, quality, seed){
 
    # nItems
   trueModel.lines = strsplit(trueModel, "\n")[[1]]
@@ -24,10 +24,10 @@ simualteDCM = function(trueModel, nObs, quality){
 
   # true item quality
   if(quality == "low"){
-    trueParameters[grep(pattern = "(Intercept)", x = names(trueParameters))] = -0.6
-    trueParameters[str_count(names(trueParameters), c("A"))==1] = 1.02
-    trueParameters[str_count(names(trueParameters), c("A"))==2] = -0.04
-    trueParameters[str_count(names(trueParameters), c("A"))==3] = 4.58
+    trueParameters[grep(pattern = "(Intercept)", x = names(trueParameters))] = -0.5
+    trueParameters[str_count(names(trueParameters), c("A"))==1] = 0.90
+    trueParameters[str_count(names(trueParameters), c("A"))==2] = 0.09
+    trueParameters[str_count(names(trueParameters), c("A"))==3] = 4.45
   } else if(quality == "medium"){
     trueParameters[grep(pattern = "(Intercept)", x = names(trueParameters))] = -1.1
     trueParameters[str_count(names(trueParameters), c("A"))==1] = 1.3
@@ -43,7 +43,10 @@ simualteDCM = function(trueModel, nObs, quality){
   trueParameters = eval(quote(trueParameters))
 
   # generate data
-  generatedData = blatentSimulate(modelText = trueModel, nObs = nObs, paramVals = trueParameters)
+  generatedData = blatentSimulate(modelText = trueModel,
+                                  nObs = nObs,
+                                  paramVals = trueParameters,
+                                  seed = seed)
 
   # extract respondents' joint/marginal MAP, response data
   trueJointMAP = as.data.frame(generatedData$data["joint"])
