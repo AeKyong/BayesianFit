@@ -37,6 +37,7 @@ simulateDCM = function(trueModel, nObs, quality, seed){
     trueParameters[grep(pattern = "(Intercept)", x = names(trueParameters))] = -2.0
     trueParameters[str_count(names(trueParameters), c("A"))==1] = 2.0
     trueParameters[str_count(names(trueParameters), c("A"))==2] = 1.0
+    trueParameters[str_count(names(trueParameters), c("A"))==3] = 0.1
   }
 
   # trueParameters

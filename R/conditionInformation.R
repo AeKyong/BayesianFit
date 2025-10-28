@@ -33,10 +33,10 @@ conditionInformation = function(arrayNumber, nReplicationsPerCondition, nCores =
 
 
   # populate condition values
-  trueModel = conditions$trueModel[conditionsMatrix[conditionNumber,1]]
-  quality = conditions$quality[conditionsMatrix[conditionNumber,2]]
-  prior =  conditions$prior[conditionsMatrix[conditionNumber,3]]
-  nObs = conditions$nObs[conditionsMatrix[conditionNumber,4]]
+  prior =  conditions$prior[conditionsMatrix[conditionNumber,1]]
+  nObs = conditions$nObs[conditionsMatrix[conditionNumber,2]]
+  quality = conditions$quality[conditionsMatrix[conditionNumber,3]]
+  trueModel = conditions$trueModel[conditionsMatrix[conditionNumber,4]]
   estiModel = conditions$estiModel[conditionsMatrix[conditionNumber,5]]
 
 
@@ -91,13 +91,14 @@ conditionInformation = function(arrayNumber, nReplicationsPerCondition, nCores =
   }
 
 
-  return(list(trueModel = trueModel,
-              quality = quality,
-              prior = prior,
-              nObs = nObs,
-              estiModel  = estiModel
-              )
-         )
+  return(list(
+    prior = prior,
+    nObs = nObs,
+    quality = quality,
+    trueModel = trueModel,
+    estiModel  = estiModel
+    )
+    )
 
 }
 

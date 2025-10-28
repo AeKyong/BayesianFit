@@ -8,8 +8,8 @@ library(psych)
 
 
 # grab command line arguments
-# arrayNumber = 219 # leave for debugging on local machine
-arrayNumber = as.numeric(commandArgs(trailingOnly = TRUE)[1])
+arrayNumber = 6179 # leave for debugging on local machine
+# arrayNumber = as.numeric(commandArgs(trailingOnly = TRUE)[1])
 
 
 set.seed(arrayNumber)
@@ -41,20 +41,15 @@ inits = setDefaultInitializeParameters(
 )
 
 
-# number of MCMC samples by estimation model
-if(syntax.model %in% c(syntax.lcdm.correct, syntax.lcdm.under, syntax.lcdm.over)){
-  nSampled = 25000
-} else {
-  nSampled = 10000
-}
+
 
 
 # estimation
 fitModel = blatentEstimate(dataMat = simDataList$responseData,
                            modelText = simulationsSpecs$estiModel,
                            options =  blatentControl(
-                             nBurnin = nSampled,
-                             nSampled = nSampled,
+                             nBurnin = 2500,  #total 2000
+                             nSampled = 5000, #total 4000
                              nThin = 5,
                              parallel = TRUE,
                              nCores = 4,
